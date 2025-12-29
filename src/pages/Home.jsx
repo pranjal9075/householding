@@ -9,7 +9,7 @@ import ITRepairServices from '../component/ITRepairServices';
 import CleaningServices from '../component/CleaningServices';
 import AppliancesServices from '../component/AppliancesServices';
 import LaundryServices from '../component/LaundryServices';
-import AboutInfo from '../component/aboutInfo';
+import AboutInfo from '../component/AboutInfo';
 
 
 
