@@ -1,44 +1,44 @@
 import React from 'react';
 import HeroSection from '../component/section/HeroSection';
-import TrendingServices from '../component/TrendingServices';
-import HandymanServices from '../component/HandymanServices';
-import ServiceSection from '../component/ServiceSection';
-import PopularServices from '../component/PopularServices';
-import VehicleServices from '../component/vehicleServices';
-import ITRepairServices from '../component/ITRepairServices';
-import CleaningServices from '../component/CleaningServices';
-import AppliancesServices from '../component/AppliancesServices';
-import LaundryServices from '../component/LaundryServices';
-import AboutInfo from '../component/AboutInfo';
 
-
-
-
+import AboutInfo from '../component/home/AboutInfo';
+import AppliancesServices from '../component/home/AppliancesServices';
+import CleaningServices from '../component/home/CleaningServices';
+import HandymanServices from '../component/home/HandymanServices';
+import ITRepairServices from '../component/home/ITRepairServices';
+import LaundryServices from '../component/home/LaundryServices';
+import PopularServices from '../component/home/PopularServices';
+import ServiceSection from '../component/home/ServiceSection';
+import TrendingServices from '../component/home/TrendingServices';
+import VehicleServices from '../component/home/vehicleServices';
 
 function Home() {
   return (
-   
-    <div> 
-       
-      {/* Wrap all subsequent sections (like the HeroSection) in a padded container.
-        Since HeroSection already uses max-w-7xl and px-4 internally, we 
-        need to ensure that padding applies correctly to the overall container.
-      */}
-      <main> 
+    <div>
+      <main>
         <HeroSection />
+
         <TrendingServices />
         <HandymanServices />
         <ServiceSection />
         <PopularServices />
         <VehicleServices />
-        <ITRepairServices />
-        <CleaningServices />
-        <AppliancesServices />
+
+        <div id="it-repair-service">
+          <ITRepairServices />
+        </div>
+
+        <div id="cleaning-pest-control">
+          <CleaningServices />
+        </div>
+
+        <div id="appliances-repair">
+          <AppliancesServices />
+        </div>
+
         <LaundryServices />
         <AboutInfo />
-        
       </main>
-      
     </div>
   );
 }

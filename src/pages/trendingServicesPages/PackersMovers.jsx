@@ -1,9 +1,9 @@
 import React from 'react'
-import ServiceBanner from '../../component/AcRepair/ServiceBanner';
-import AcSummary from '../../component/AcRepair/AcSummary';
-import ServiceGrid from '../../component/AcRepair/ServiceGrid';
-import ACServicesPage from '../../component/AcRepair/ACServicesPage';
 import { assets } from '../../assets/assets';
+import ServiceBanner from '../../component/CardStructure/ServiceBanner';
+import ServiceGrid from '../../component/CardStructure/ServiceGrid';
+import ACServicesPage from '../../component/CardStructure/ServicesPage';
+import Summary from '../../component/CardStructure/Summary';
 
 
 
@@ -87,7 +87,7 @@ export const PackersMovers = () => {
   return (
     <>
       <ServiceBanner title="Packers And Movers Service"/>
-      <AcSummary title={summary} />
+      <Summary title={summary} />
       {/* <ACServiceGrid /> */}
       <ServiceGrid items={services}/>
       <ACServicesPage items={faqs} />

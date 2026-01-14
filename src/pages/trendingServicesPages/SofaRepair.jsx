@@ -1,9 +1,10 @@
 import React from 'react'
-import ServiceBanner from '../../component/AcRepair/ServiceBanner';
-import AcSummary from '../../component/AcRepair/AcSummary';
-import ServiceGrid from '../../component/AcRepair/ServiceGrid';
-import ACServicesPage from '../../component/AcRepair/ACServicesPage';
 import { assets } from '../../assets/assets';
+import ServiceBanner from '../../component/CardStructure/ServiceBanner';
+import ServiceGrid from '../../component/CardStructure/ServiceGrid';
+import ACServicesPage from '../../component/CardStructure/ServicesPage';
+import Summary from '../../component/CardStructure/Summary';
+
 
 
 
@@ -47,7 +48,7 @@ const services = [
   },
   {
     title: "SECTIONAL SOFA REPAIR",
-    description: "Our technician will remove old upholstery and use the new upholstery. When you use the couch for a long time then you need to redecorate your sofa with a new couch. Whenever you need our technician wi",
+    description: `Our technician will remove old upholstery and use the new upholstery. When you use the couch for a long time then you need to redecorate your sofa with a new couch. Whenever you need our technician wi`,
     image: assets.sectionalsofa_repair
   },
   {
@@ -86,7 +87,7 @@ export const SofaRepair = () => {
   return (
     <>
       <ServiceBanner title="Sofa Repair Service"/>
-      <AcSummary title={summary} />
+      <Summary title={summary} />
       {/* <ACServiceGrid /> */}
       <ServiceGrid items={services}/>
       <ACServicesPage items={faqs} />

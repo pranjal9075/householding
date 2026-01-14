@@ -1,115 +1,66 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FiCheckCircle, FiShield, FiClock, FiStar } from 'react-icons/fi';
+import React, { useEffect, useState } from 'react';
+import { Home, Sparkles } from 'lucide-react';
 import { assets } from '../../assets/assets';
 
-
 const HeroSection = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
   return (
-    <div className="relative bg-white overflow-hidden pt-20 pb-28">
-      {/* Animated Background Orbs */}
-      <motion.div 
-        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 8, repeat: Infinity }}
-        className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-100 rounded-full blur-[100px] -z-10" 
-      />
-      <motion.div 
-        animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
-        transition={{ duration: 10, repeat: Infinity }}
-        className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-green-100 rounded-full blur-[100px] -z-10" 
-      />
+    <section className="relative w-full h-[500px] md:h-[600px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
+      {/* Background Image */}
+      <div 
+        className={`absolute inset-0 bg-cover bg-center transition-all duration-1000 ${isLoaded ? 'scale-100 opacity-100' : 'scale-110 opacity-0'}`}
+        style={{ backgroundImage: `url(${assets.houseHero})` }}
+      >
+        <div className={`absolute inset-0 bg-gradient-to-r from-black/50 to-black/30 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}></div>
+      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="flex flex-col lg:flex-row items-center gap-12">
-          
-          {/* Left Side: Animated Text */}
-          <motion.div 
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="flex-1 text-center lg:text-left"
-          >
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 bg-slate-900 text-white px-5 py-2 rounded-full text-sm font-bold mb-8 shadow-xl"
-            >
-              <FiStar className="text-yellow-400 fill-yellow-400" />
-              Trusted by 5,000+ Happy Customers
-            </motion.div>
-
-            <h1 className="text-5xl md:text-7xl font-black text-slate-900 mb-8 leading-tight tracking-tight">
-              तुमच्या घरासाठी <br />
-              <span className="relative inline-block">
-                <span className="text-[#E67E22]">Reliable</span>
-                <motion.div 
-                  initial={{ width: 0 }}
-                  whileInView={{ width: '100%' }}
-                  transition={{ delay: 0.5, duration: 0.8 }}
-                  className="absolute bottom-2 left-0 h-3 bg-orange-100 -z-10" 
-                />
-              </span>
-              &nbsp;आणि <br />
-              <span className="text-[#5CB85C]">Expert</span> सर्व्हिसेस
-            </h1>
-
-            <p className="max-w-xl mx-auto lg:mx-0 text-xl text-slate-500 mb-10 font-medium leading-relaxed">
-              Repair Bazar: जिथे मिळते तुमच्या घराला हक्काची साथ. प्रोफेशनल सर्व्हिसेस, आता एका क्लिकवर.
-            </p>
-
-            <div className="flex flex-wrap justify-center lg:justify-start gap-5">
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-[#E67E22] text-white px-10 py-5 rounded-2xl font-black text-lg shadow-[0_10px_20px_rgba(230,126,34,0.3)] hover:bg-slate-900 transition-colors"
-              >
-                आत्ताच बुक करा
-              </motion.button>
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                className="bg-white text-slate-900 border-2 border-slate-200 px-10 py-5 rounded-2xl font-black text-lg hover:border-orange-500 transition-colors"
-              >
-                आमच्या सर्व्हिसेस
-              </motion.button>
+      {/* Main Content */}
+      <div className="relative z-10 h-full flex flex-col">
+        {/* Header with Logo */}
+        <div className={`flex items-center justify-between p-6 transition-all duration-1000 ${isLoaded ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0'}`}>
+          <div className="flex items-center gap-3">
+            <img src={assets.logo_rb} alt="REPAIR BAZAAR" className="h-12 md:h-16 hover:scale-110 transition-transform duration-300" />
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold">
+                <span className="text-orange-500">House</span>
+                <span className="text-blue-600">Holding</span>
+              </h1>
+              <p className="text-xs text-white/80">Home Services</p>
             </div>
-          </motion.div>
-
-          {/* Right Side: Floating Image Montage */}
-          <div className="flex-1 relative">
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1 }}
-              className="relative"
-            >
-              {/* Main Image */}
-              <div className="relative z-10 rounded-[40px] overflow-hidden border-[12px] border-white shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500">
-                <img src={assets.electrician_service} alt="Pro" className="w-full h-full object-cover" />
-              </div>
-
-              {/* Floating Success Card */}
-              <motion.div 
-                animate={{ y: [0, -15, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -bottom-10 -left-10 z-20 bg-white p-5 rounded-3xl shadow-2xl flex items-center gap-4 border border-slate-50"
-              >
-                <div className="bg-green-100 p-3 rounded-2xl text-green-600">
-                  <FiCheckCircle size={32} />
-                </div>
-                <div>
-                  <div className="text-2xl font-black text-slate-900">4.9/5</div>
-                  <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Client Reviews</div>
-                </div>
-              </motion.div>
-
-              {/* Decorative Circle */}
-              <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#E67E22] opacity-10 rounded-full animate-pulse" />
-            </motion.div>
           </div>
+        </div>
 
+        {/* Center Content */}
+        <div className="flex-1 flex items-center justify-center px-6">
+          <div className="text-center max-w-4xl">
+            <h2 className={`text-4xl md:text-6xl font-bold text-white mb-6 transition-all duration-1000 delay-300 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+              Your Home, Expertly Cared For
+            </h2>
+            <p className={`text-xl md:text-2xl text-white/90 mb-8 transition-all duration-1000 delay-500 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+              Reliable & Professional Repair Services, Just a Tap Away
+            </p>
+            <div className={`transition-all duration-1000 delay-700 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+              <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:scale-105 transition-all duration-300 shadow-xl flex items-center gap-2 mx-auto">
+                Book Service Now
+                <Sparkles size={20} className="animate-pulse" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Floating Elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-20 left-10 w-3 h-3 bg-orange-400/30 rounded-full animate-bounce" style={{animationDelay: '0s'}}></div>
+          <div className="absolute top-32 right-20 w-2 h-2 bg-blue-400/40 rounded-full animate-bounce" style={{animationDelay: '1s'}}></div>
+          <div className="absolute bottom-40 left-20 w-4 h-4 bg-white/20 rounded-full animate-bounce" style={{animationDelay: '2s'}}></div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -1,9 +1,10 @@
 import React from 'react'
-import ServiceBanner from '../../component/AcRepair/ServiceBanner';
-import AcSummary from '../../component/AcRepair/AcSummary';
-import ServiceGrid from '../../component/AcRepair/ServiceGrid';
-import ACServicesPage from '../../component/AcRepair/ACServicesPage';
+
 import { assets } from '../../assets/assets';
+import ServiceBanner from '../../component/CardStructure/ServiceBanner';
+import ServiceGrid from '../../component/CardStructure/ServiceGrid';
+import ACServicesPage from '../../component/CardStructure/ServicesPage';
+import Summary from '../../component/CardStructure/Summary';
 
 
 
@@ -99,7 +100,7 @@ const CctvRepair = () => {
   return (
     <>
       <ServiceBanner title="cctv repair service"/>
-      <AcSummary />
+      <Summary />
       {/* <ACServiceGrid /> */}
       <ServiceGrid items={services}/>
       <ACServicesPage items={faqs} />

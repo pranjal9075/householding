@@ -165,6 +165,69 @@ import kitchen_cleaning from './kitchen_cleaning.jpg';
 import leather_sofacleaning from './leather_sofacleaning.jpg';
 import mattress_shampooing from './mattress_shampooing.png';
 import overhead_leaning from './overhead_leaning.jpg';
+import Accent_Chair_Repair from './Accent_Chair_Repair.jpg';
+import Armchair_Repair from './Armchair_Repair.jpg';
+import Big_TallChair from './Big_TallChair.jpg';
+import Club_Chair_Repair from './Club_Chair_Repair.jpg';
+import ConferenceChairRepair from './ConferenceChairRepair.jpg';
+import Contemporary_Round_Chair from './Contemporary_Round_Chair.png';
+import Executive_Chair_Repair from './Executive_Chair_Repair.jpg';
+import Guest_Chair_Repair from './Guest_Chair_Repair.jpg';
+import Loveseat_Chair_Repair from './Loveseat_Chair_Repair.png';
+import Office_Chair_Repair1 from './Office_Chair_Repair1.jpg';
+import Recliner_Chair_Repair from './Recliner_Chair_Repair.png';
+import Wingback_Chair_Repair from './Wingback_Chair_Repair.png';
+import BedroomWardrobeInstallation from './BedroomWardrobeInstallation.jpg';
+import ExecutiveOfficeDesk from './ExecutiveOfficeDesk.jpg';
+import FixedFurniture from './FixedFurniture.jpg';
+import HomeFurniture from './HomeFurniture.jpg';
+import KitchenCabinetInstallation from './KitchenCabinetInstallation.jpg';
+import ModularFurnitureInstallation from './ModularFurnitureInstallation.jpg';
+import OfficeFurniture from './OfficeFurniture.jpg';
+import OfficeWorkstation from './OfficeWorkstation.jpg';
+import Wardrobe from './Wardrobe.jpg';
+import WoodenFlooring from './WoodenFlooring.jpg';
+import WoodenPanel from './WoodenPanel.jpg';
+import BedCarpenterService from './BedCarpenterService.jpg';
+import BirdNetting from './BirdNetting.jpg';
+import DoorChain from './DoorChain.jpg';
+import FurnitureRepair from './FurnitureRepair.jpg';
+import DoorLatch from './DoorLatch.jpg';
+import DoorPeephole from './DoorPeephole.jpg';
+import DoorStopper from './DoorStopper.jpg';
+import Handle from './Handle.png';
+import MakingAnewSofa from './MakingAnewSofa.jpg';
+import MeshRoof from './MeshRoof.jpg';
+import WoodenChair from './WoodenChair.jpg';
+import WoodenPartition from './WoodenPartition.jpg';
+import Phase from './Phase.jpg';
+import CeilingFan from './CeilingFan.jpg';
+import ExhaustFan from './ExhaustFan.jpg';
+import FancyLight from './FancyLight.jpg';
+import HolderSocket from './HolderSocket.jpg';
+import HomeHealthCheckup from './HomeHealthCheckup.jpg';
+import Inverter from './Inverter.jpg';
+import MainControl from './MainControl.jpg';
+import NewPoint from './NewPoint.jpg';
+import OtherElectrical from './OtherElectrical.jpg';
+import SmartHome from './SmartHome.jpg';
+import TubeLight from './TubeLight.jpg';
+import DoorWardrobe from './DoorWardrobe.jpg';
+import CustomWardrobe from './CustomWardrobe.jpg';
+import SlidingWardrobe from './SlidingWardrobe.jpg';
+import WoodenWardrobe from './WoodenWardrobe.jpg';
+import DamroWardrobe from './DamroWardrobe.jpg';
+import WalkinWardrobe from './WalkinWardrobe.jpg';
+import FittedWardrobe from './FittedWardrobe.jpg';
+import FinoWardrobe from './FinoWardrobe.jpg';
+import GuestChair from './GuestChair.jpg';
+import LeatherFurniture from './LeatherFurniture.png';
+import RackRepair from './RackRepair.jpg';
+import WornOffLeather from './WornOffLeather.jpg';
+import FurnitureRestoration from './FurnitureRestoration.jpg';
+import SeamReinforcements from './SeamReinforcements.jpg';
+import houseHero from './houseHero.png';
+import { Home } from 'lucide-react';
 
 export const assets={
     logo_rb,
@@ -334,4 +397,67 @@ export const assets={
     leather_sofacleaning,
     mattress_shampooing,
     overhead_leaning,
-}
+    Accent_Chair_Repair,
+    Armchair_Repair,
+    Big_TallChair,
+    Club_Chair_Repair,
+    ConferenceChairRepair,
+    Contemporary_Round_Chair,
+    Executive_Chair_Repair,
+    Guest_Chair_Repair,
+    Loveseat_Chair_Repair,
+    Office_Chair_Repair1,
+    Recliner_Chair_Repair,
+    Wingback_Chair_Repair,
+    BedroomWardrobeInstallation,
+    ExecutiveOfficeDesk,
+    FixedFurniture,
+    HomeFurniture,
+    KitchenCabinetInstallation,
+    ModularFurnitureInstallation,
+    OfficeFurniture,
+    OfficeWorkstation,
+    Wardrobe,
+    WoodenFlooring,
+    WoodenPanel,
+    BedCarpenterService,
+    BirdNetting,
+    DoorChain,
+    DoorLatch,
+    DoorPeephole,
+    DoorStopper,
+    FurnitureRepair,
+    Handle,
+    MakingAnewSofa,
+    MeshRoof,
+    WoodenChair,
+    WoodenPartition,
+    Phase,
+    CeilingFan,
+    ExhaustFan,
+    FancyLight,
+    HolderSocket,
+    HomeHealthCheckup,
+    Inverter,
+    MainControl,
+    NewPoint,
+    OtherElectrical,
+    SmartHome,
+    TubeLight,
+    DoorWardrobe,
+    CustomWardrobe,
+    SlidingWardrobe,
+    WoodenWardrobe,
+    DamroWardrobe,
+    WalkinWardrobe,
+    FittedWardrobe,
+    FinoWardrobe,
+    GuestChair,
+    LeatherFurniture,
+    RackRepair,
+    WornOffLeather,
+    FurnitureRestoration,
+    SeamReinforcements,
+    houseHero,
+   
+    }
