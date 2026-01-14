@@ -80,7 +80,7 @@ const ServiceBanner = ({ title }) => {
           >
             Book Now
             <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-          </button>}
+          </button>
           
           {/* Company Info */}
           <div className="mt-8 flex flex-col gap-2">
