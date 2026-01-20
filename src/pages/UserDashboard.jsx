@@ -32,8 +32,6 @@ import {
   Snowflake,
   Brush,
   Paintbrush,
-  Wallet,
-  Package,
   Bell,
   AlertCircle,
   Repeat,
@@ -213,7 +211,7 @@ const UserDashboard = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <button 
             onClick={() => navigate('/')}
             className="bg-blue-500 hover:bg-blue-600 text-white p-6 rounded-xl font-medium transition flex items-center justify-center gap-3 text-lg"
@@ -226,33 +224,15 @@ const UserDashboard = () => {
           >
             <Repeat size={24} /> Repeat Last Service
           </button>
-          <button 
-            onClick={() => navigate('/')}
-            className="bg-red-500 hover:bg-red-600 text-white p-6 rounded-xl font-medium transition flex items-center justify-center gap-3 text-lg"
-          >
-            <AlertCircle size={24} /> Emergency Service
-          </button>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <SummaryCard 
             icon={<CheckCircle className="text-green-500" />} 
             label="Total Bookings" 
             value="15"
             bgColor="bg-green-50"
-          />
-          <SummaryCard 
-            icon={<Package className="text-purple-500" />} 
-            label="Saved Amount" 
-            value="₹2,450"
-            bgColor="bg-purple-50"
-          />
-          <SummaryCard 
-            icon={<Wallet className="text-blue-500" />} 
-            label="Wallet Balance" 
-            value="₹1,200"
-            bgColor="bg-blue-50"
           />
           <SummaryCard 
             icon={<Star className="text-yellow-500" />} 
@@ -266,12 +246,6 @@ const UserDashboard = () => {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold text-gray-800">Current Service</h2>
-            <button 
-              onClick={() => navigate('/')}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition flex items-center gap-2"
-            >
-              <Plus size={20} /> Book New Service
-            </button>
           </div>
 
           {activeService ? (
@@ -330,7 +304,7 @@ const UserDashboard = () => {
                   <Phone size={16} /> Call
                 </button>
                 <button 
-                  onClick={() => navigate('/chat-technician')}
+                  onClick={() => window.open(`https://wa.me/${activeService.phone.replace(/[^0-9]/g, '')}?text=Hi, I need help with my service booking ${activeService.id}`)}
                   className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition"
                 >
                   Chat
@@ -345,7 +319,7 @@ const UserDashboard = () => {
               <p className="text-gray-600 mb-4">No active service. Book a service now.</p>
               <button 
                 onClick={() => navigate('/')}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition "
               >
                 Book Service Now
               </button>
@@ -428,33 +402,6 @@ const UserDashboard = () => {
 
           {/* Right Column - Quick Info */}
           <div className="space-y-6">
-            {/* Wallet & Packages */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Wallet & Packages</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <Wallet size={20} className="text-blue-600" />
-                    <span className="font-medium">Wallet Balance</span>
-                  </div>
-                  <span className="font-bold text-blue-600">₹1,200</span>
-                </div>
-                <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <Package size={20} className="text-purple-600" />
-                    <span className="font-medium">Active Package</span>
-                  </div>
-                  <span className="font-bold text-purple-600">Premium</span>
-                </div>
-              </div>
-              <button 
-                onClick={() => navigate('/packages')}
-                className="w-full mt-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white py-2 rounded-lg font-medium"
-              >
-                View Packages
-              </button>
-            </div>
-
             {/* Notifications */}
             <div className="bg-white p-6 rounded-xl shadow-sm border">
               <div className="flex justify-between items-center mb-4">

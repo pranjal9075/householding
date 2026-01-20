@@ -1,80 +1,45 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Eye, MapPin, Phone, Calendar, Clock, Star, Download, Repeat, X, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Eye, MapPin, Phone, Calendar, Clock, Star, Download, Repeat, X, MessageCircle, CreditCard } from 'lucide-react';
+import { useBooking } from '../../context/BookingContext';
+import { useAuth } from '../../context/AuthContext';
 
 const MyBookings = () => {
   const navigate = useNavigate();
+  const { bookings, getUserBookings } = useBooking();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('ongoing');
 
-  const bookings = {
-    ongoing: [
-      {
-        id: 'RB001',
-        service: 'Electrician',
-        date: 'Dec 18, 2024',
-        time: '2:00 PM',
-        technician: 'Ramesh Kumar',
-        phone: '+91 98765 43210',
-        status: 'On the way',
-        amount: '₹799',
-        canCancel: true,
-        canTrack: true
-      }
-    ],
-    completed: [
-      {
-        id: 'RB003',
-        service: 'Plumber',
-        date: 'Dec 15, 2024',
-        time: '3:00 PM',
-        technician: 'Rajesh Singh',
-        phone: '+91 98765 43212',
-        status: 'Completed',
-        amount: '₹599',
-        rating: 0,
-        canRebook: true
-      },
-      {
-        id: 'RB005',
-        service: 'AC Repair',
-        date: 'Dec 10, 2024',
-        time: '11:00 AM',
-        technician: 'Suresh Sharma',
-        phone: '+91 98765 43211',
-        status: 'Completed',
-        amount: '₹1299',
-        rating: 5,
-        canRebook: true
-      }
-    ],
-    cancelled: [
-      {
-        id: 'RB004',
-        service: 'House Cleaning',
-        date: 'Dec 12, 2024',
-        time: '11:00 AM',
-        technician: 'Priya Devi',
-        phone: '+91 98765 43213',
-        status: 'Cancelled',
-        amount: '₹1199',
-        cancelReason: 'Customer request',
-        canRebook: true
-      }
-    ]
+  // Get user bookings from context
+  const userBookings = getUserBookings(user?.id || 'guest');
+  
+  // Categorize bookings
+  const categorizedBookings = {
+    ongoing: userBookings.filter(b => b.booking_status === 'pending' || b.booking_status === 'accepted'),
+    completed: userBookings.filter(b => b.booking_status === 'completed'),
+    cancelled: userBookings.filter(b => b.booking_status === 'cancelled')
   };
 
   const tabs = [
-    { key: 'ongoing', label: 'Ongoing', count: bookings.ongoing.length },
-    { key: 'completed', label: 'Completed', count: bookings.completed.length },
-    { key: 'cancelled', label: 'Cancelled', count: bookings.cancelled.length }
+    { key: 'ongoing', label: 'Ongoing', count: categorizedBookings.ongoing.length },
+    { key: 'completed', label: 'Completed', count: categorizedBookings.completed.length },
+    { key: 'cancelled', label: 'Cancelled', count: categorizedBookings.cancelled.length }
   ];
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'On the way': return 'bg-blue-100 text-blue-700';
-      case 'Working': return 'bg-yellow-100 text-yellow-700';
-      case 'Completed': return 'bg-green-100 text-green-700';
-      case 'Cancelled': return 'bg-red-100 text-red-700';
+      case 'pending': return 'bg-yellow-100 text-yellow-700';
+      case 'accepted': return 'bg-blue-100 text-blue-700';
+      case 'completed': return 'bg-green-100 text-green-700';
+      case 'cancelled': return 'bg-red-100 text-red-700';
+      default: return 'bg-gray-100 text-gray-700';
+    }
+  };
+
+  const getPaymentStatusColor = (status) => {
+    switch (status) {
+      case 'paid': return 'bg-green-100 text-green-700';
+      case 'unpaid': return 'bg-orange-100 text-orange-700';
       default: return 'bg-gray-100 text-gray-700';
     }
   };
@@ -93,81 +58,54 @@ const MyBookings = () => {
     <div className="bg-white p-6 rounded-lg border shadow-sm hover:shadow-md transition">
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h3 className="font-bold text-lg text-gray-800">{booking.service}</h3>
+          <h3 className="font-bold text-lg text-gray-800">{booking.serviceName}</h3>
           <p className="text-sm text-gray-600">Booking ID: {booking.id}</p>
         </div>
-        <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(booking.status)}`}>
-          {booking.status}
-        </span>
+        <div className="flex flex-col gap-2">
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(booking.booking_status)}`}>
+            {booking.booking_status?.charAt(0).toUpperCase() + booking.booking_status?.slice(1)}
+          </span>
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${getPaymentStatusColor(booking.payment_status)}`}>
+            {booking.payment_status?.charAt(0).toUpperCase() + booking.payment_status?.slice(1)}
+          </span>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
         <div className="flex items-center gap-2 text-sm text-gray-600">
           <Calendar size={16} />
-          <span>{booking.date} at {booking.time}</span>
+          <span>{booking.preferredDate} at {booking.timeSlot}</span>
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <Phone size={16} />
-          <span>{booking.technician}</span>
-        </div>
+        {booking.technician && (
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Phone size={16} />
+            <span>{booking.technician.name}</span>
+          </div>
+        )}
       </div>
 
-      {booking.cancelReason && (
-        <div className="mb-4 p-3 bg-red-50 rounded-lg">
-          <p className="text-sm text-red-700">Cancelled: {booking.cancelReason}</p>
-        </div>
-      )}
-
-      {booking.status === 'Completed' && booking.rating === 0 && (
-        <div className="mb-4 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-          <p className="text-sm text-yellow-700 mb-2">Rate your service experience</p>
-          <button 
-            onClick={() => handleRateService(booking.id)}
-            className="text-yellow-600 hover:text-yellow-700 font-medium text-sm"
-          >
-            Give Rating ⭐
-          </button>
-        </div>
-      )}
-
-      {booking.status === 'Completed' && booking.rating > 0 && (
-        <div className="mb-4 flex items-center gap-2">
-          <span className="text-sm text-gray-600">Your rating:</span>
-          <div className="flex">
-            {[...Array(5)].map((_, i) => (
-              <Star 
-                key={i} 
-                size={16} 
-                className={i < booking.rating ? 'text-yellow-500 fill-current' : 'text-gray-300'} 
-              />
-            ))}
+      {/* Payment Method */}
+      {booking.payment_method && (
+        <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+          <div className="flex items-center gap-2 text-sm text-gray-700">
+            <CreditCard size={16} />
+            <span>Payment: {booking.payment_method}</span>
           </div>
         </div>
       )}
 
+      {/* Problem Description */}
+      {booking.problemDescription && (
+        <div className="mb-4 p-3 bg-blue-50 rounded-lg">
+          <p className="text-sm text-blue-700">
+            <strong>Issue:</strong> {booking.problemDescription}
+          </p>
+        </div>
+      )}
+
       <div className="flex justify-between items-center">
-        <span className="font-bold text-xl text-gray-800">{booking.amount}</span>
+        <span className="font-bold text-xl text-gray-800">₹{booking.amount}</span>
         <div className="flex gap-2">
-          {booking.canTrack && (
-            <button 
-              onClick={() => navigate('/track-service', { state: { booking } })}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm flex items-center gap-1 hover:bg-blue-600 transition"
-            >
-              <MapPin size={16} />
-              Track
-            </button>
-          )}
-          
-          {booking.status === 'Ongoing' && (
-            <button 
-              onClick={() => navigate('/chat-technician', { state: { booking } })}
-              className="px-4 py-2 bg-green-500 text-white rounded-lg text-sm flex items-center gap-1 hover:bg-green-600 transition"
-            >
-              <MessageCircle size={16} />
-              Chat
-            </button>
-          )}
-          
           <button 
             onClick={() => navigate('/service-details', { state: { booking } })}
             className="px-4 py-2 bg-gray-500 text-white rounded-lg text-sm flex items-center gap-1 hover:bg-gray-600 transition"
@@ -176,7 +114,7 @@ const MyBookings = () => {
             View
           </button>
           
-          {booking.canCancel && (
+          {booking.booking_status === 'pending' && (
             <button 
               onClick={() => handleCancelBooking(booking.id)}
               className="px-4 py-2 bg-red-500 text-white rounded-lg text-sm flex items-center gap-1 hover:bg-red-600 transition"
@@ -186,23 +124,13 @@ const MyBookings = () => {
             </button>
           )}
           
-          {booking.canRebook && (
+          {(booking.booking_status === 'cancelled' || booking.booking_status === 'completed') && (
             <button 
-              onClick={() => navigate('/', { state: { rebookService: booking.service } })}
+              onClick={() => navigate('/', { state: { rebookService: booking.serviceName } })}
               className="px-4 py-2 bg-purple-500 text-white rounded-lg text-sm flex items-center gap-1 hover:bg-purple-600 transition"
             >
               <Repeat size={16} />
               Rebook
-            </button>
-          )}
-          
-          {booking.status === 'Completed' && (
-            <button 
-              onClick={() => navigate('/download-bill', { state: { booking } })}
-              className="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm flex items-center gap-1 hover:bg-orange-600 transition"
-            >
-              <Download size={16} />
-              Bill
             </button>
           )}
         </div>
@@ -241,8 +169,8 @@ const MyBookings = () => {
 
         {/* Bookings List */}
         <div className="space-y-6">
-          {bookings[activeTab].length > 0 ? (
-            bookings[activeTab].map((booking) => (
+          {categorizedBookings[activeTab].length > 0 ? (
+            categorizedBookings[activeTab].map((booking) => (
               <BookingCard key={booking.id} booking={booking} />
             ))
           ) : (

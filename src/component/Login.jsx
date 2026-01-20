@@ -137,19 +137,16 @@ const Login = ({ isOpen, onClose, onLoginSuccess, onSwitchToRegister }) => {
                                     </button>
                                 </form>
 
-                               <div className="mt-6 text-center text-sm text-slate-300">
-                                        Don't have an account?{" "}
-                                        <button 
-                                            type="button" 
-                                            onClick={() => {
-                                                console.log("Button clicked, calling onSwitchToRegister");
-                                                onSwitchToRegister(); // <--- Is function ko execute karna zaroori hai
-                                            }} 
-                                            className="text-cyan-400 font-bold hover:underline ml-1 cursor-pointer"
-                                            >
-                                            Register Now
-                                        </button>
-        </div>
+                               <p className="text-sm text-center mt-4 text-white">
+                                    Don’t have an account?{" "}
+                                    <span
+                                        onClick={onSwitchToRegister}
+                                        className="text-blue-600 cursor-pointer hover:underline font-semibold"
+                                    >
+                                        Register
+                                    </span>
+                                    </p>
+
                             </>
                         ) : (
                             <div className="text-center py-8">

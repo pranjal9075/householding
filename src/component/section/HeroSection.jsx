@@ -5,12 +5,19 @@ import { assets } from '../../assets/assets';
 const HeroSection = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const scrollToTrending=()=>{
+    const el=document.getElementById("service");
+    if(el){
+      el.scrollIntoView({behavior:"smooth",block: "start" });
+    };
+  }
+
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
   return (
-    <section className="relative w-full h-[500px] md:h-[600px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
+    <section className="relative w-full h-[520px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
       {/* Background Image */}
       <div 
         className={`absolute inset-0 bg-cover bg-center transition-all duration-1000 ${isLoaded ? 'scale-100 opacity-100' : 'scale-110 opacity-0'}`}
@@ -41,11 +48,11 @@ const HeroSection = () => {
             <h2 className={`text-4xl md:text-6xl font-bold text-white mb-6 transition-all duration-1000 delay-300 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
               Your Home, Expertly Cared For
             </h2>
-            <p className={`text-xl md:text-2xl text-white/90 mb-8 transition-all duration-1000 delay-500 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <p className={`text-xl md:text-2xl text-white/90 mb-8 transition-all duration-1000 delay-500 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'} `}>
               Reliable & Professional Repair Services, Just a Tap Away
             </p>
             <div className={`transition-all duration-1000 delay-700 ${isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-              <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:scale-105 transition-all duration-300 shadow-xl flex items-center gap-2 mx-auto">
+              <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:scale-105 transition-all duration-300 shadow-xl flex items-center gap-2 mx-auto " onClick={scrollToTrending}UU>
                 Book Service Now
                 <Sparkles size={20} className="animate-pulse" />
               </button>

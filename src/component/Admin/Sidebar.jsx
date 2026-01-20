@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, Users, Settings, BarChart3, Wrench, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Users, Settings, BarChart3, Wrench, ChevronRight, Calendar, CreditCard, MessageSquare } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
@@ -8,8 +8,11 @@ const Sidebar = () => {
 
   const menuItems = [
     { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/admin' },
-    { name: 'Service Partners', icon: <Wrench size={20} />, path: '/admin/service-partners' },
-    { name: 'Customers', icon: <Users size={20} />, path: '/admin/customers' },
+    { name: 'Bookings', icon: <Calendar size={20} />, path: '/admin/bookings' },
+    { name: 'Technicians', icon: <Wrench size={20} />, path: '/admin/technicians' },
+    { name: 'Users', icon: <Users size={20} />, path: '/admin/users' },
+    { name: 'Payments', icon: <CreditCard size={20} />, path: '/admin/payments' },
+    { name: 'Support Tickets', icon: <MessageSquare size={20} />, path: '/admin/support-tickets' },
     { name: 'Reports', icon: <BarChart3 size={20} />, path: '/admin/reports' },
     { name: 'Settings', icon: <Settings size={20} />, path: '/admin/settings' },
   ];

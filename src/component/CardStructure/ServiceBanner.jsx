@@ -69,7 +69,7 @@ const ServiceBanner = ({ title }) => {
           </h1>
           
           {/* Subtitle */}
-          <p className="text-gray-300 text-lg md:text-xl mb-8 max-w-2xl leading-relaxed">
+          <p className="text-gray-300 text-lg md:text-xl mb-8 max-w-2xl leading-relaxed ">
             Professional repair services with expert technicians and guaranteed satisfaction
           </p>
           

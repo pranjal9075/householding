@@ -5,87 +5,40 @@ import { assets } from '../../assets/assets';
 import Search from './Search';
 import Register from '../Register';
 import Login from '../Login';
+import TechnicianRegister from '../technician/TechnicianRegister';
+import TechnicianLogin from '../technician/TechnicianLogin';
+import TechnicianOptions from '../technician/TechnicianOptions';
 import { useAuth } from '../../context/AuthContext';
 
-
-
 const serviceCategories = [
-    {   
-        title: "Appliances Repair",
+         {title:"Trending Services",id:"trending-services"},
+         {title:"Handyman Services",id:"handyman-services"},
+         {title:"Service Section",id:"service-services"},
+         {title:"Popular Services",id:"popular-services"},
+         {title:"Vehicle Services",id:"vehical-services"},
+         {title:"ITRepair Services",id:"it-repair-service"},
+         {title:"Cleaning Services",id:"cleaning-pest-control"},
+         {title:"Appliances Services",id:"appliances-repair"},
+         {title:"Laundry Services",id:"laundry-services"},
         
-    },
-    {
-        title: "IT Repair Service",
-        
-    },
-    {
-        title: "Cleaning-Pest Control",
-       
-    },
-    {
-        title: "Beauty-Spa Service",
-       
-    }
 ];
 
+const scrollToSection = (id) => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+};
+
 const ServiceColumn = ({ category, onCategoryClick }) => {
-    const getSectionId = (title) => {
-        switch(title) {
-            case "Appliances Repair":
-                return "appliances-repair";
-            case "IT Repair Service":
-                return "it-repair-service";
-            case "Cleaning-Pest Control":
-                return "cleaning-pest-control";
-            default:
-                return null;
-        }
-    };
-
-    const sectionId = getSectionId(category.title);
-     // ✅ SWITCHING LOGIC (Implement kiya gaya hai)
-  const handleSwitchToRegister = () => {
-    setIsLoginOpen(false);
-    setTimeout(() => setIsRegisterOpen(true), 100);
-  };
-
-    return (
-        <div className="flex flex-col">
-            <h3 
-                className={`text-sm font-bold text-gray-800 mb-2 border-b border-gray-100 pb-1 uppercase tracking-wide ${
-                    sectionId ? 'cursor-pointer hover:text-blue-600 transition-colors' : ''
-                }`}
-                onClick={() => sectionId && onCategoryClick(sectionId)}
-            >
-                {category.title}
-            </h3>
-            <ul className="space-y-1">
-                {category.items?.map((item, index) => (
-                    <li key={index}>
-                        <Link to={`/services/${item.toLowerCase().replace(/\s+/g, "-")}`} className="text-xs text-gray-600 hover:text-blue-600 transition block py-0.5">
-                            {item}
-                        </Link>
-                    </li>
-                )) || []}
-            </ul>
-            {/* {category.subCategories?.map((sub, subIndex) => (
-                <div key={subIndex} className="mt-4">
-                    <h3 className="text-sm font-bold text-orange-600 mb-2 border-b border-gray-100 pb-1 uppercase tracking-wide">
-                        {sub.title}
-                    </h3>
-                    <ul className="space-y-1">
-                        {sub.items?.map((item, index) => (
-                            <li key={index}>
-                                <Link to={`/services/${item.toLowerCase().replace(/\s+/g, "-")}`} className="text-xs text-gray-600 hover:text-blue-600 transition block py-0.5">
-                                    {item}
-                                </Link>
-                            </li>
-                        )) || []}
-                    </ul>
-                </div>
-            )) || []} */}
-        </div>
-    );
+  return (
+    <div
+      onClick={() => onCategoryClick(category.id)}
+      className="cursor-pointer text-sm font-semibold text-gray-700 hover:text-blue-600 py-1"
+    >
+      {category.title}
+    </div>
+  );
 };
 
 const Header = () => {
@@ -93,12 +46,23 @@ const Header = () => {
     const [isServiceHovered, setIsServiceHovered] = useState(false);
     const [isRegisterOpen, setIsRegisterOpen] = useState(false);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const [isTechRegisterOpen, setIsTechRegisterOpen] = useState(false);
+    const [isTechLoginOpen, setIsTechLoginOpen] = useState(false);
+    const [isTechOptionsOpen, setIsTechOptionsOpen] = useState(false);
     const [showUserDropdown, setShowUserDropdown] = useState(false);
     const { isLoggedIn, user, logout } = useAuth();
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
     const [userImage, setUserImage] = useState(null);
 
+    const switchToRegister = () => {
+        setIsLoginOpen(false);
+        setTimeout(() => {
+            setIsRegisterOpen(true);
+        }, 150);
+        };
+
+    
     // Smooth scroll function
     const scrollToSection = (sectionId) => {
         // Check if we're on the home page
@@ -147,7 +111,7 @@ const Header = () => {
 
     const handleLoginSuccess = () => {
         setIsLoginOpen(false);
-        navigate('/user-dashboard');
+        navigate('/');
     };
 
     const handleLogout = () => {
@@ -164,7 +128,7 @@ const Header = () => {
     const navLinkClass = "text-gray-600 hover:text-blue-600 text-sm font-medium transition py-2";
 
     return (
-        <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50 w-full">
+        <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50 w-full ">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
 
@@ -175,8 +139,7 @@ const Header = () => {
                     </div>
 
                     <nav className="hidden md:flex space-x-6 items-center ">
-                        <Link to="/" className={navLinkClass}>Home</Link>
-                        <Link to="/package" className={navLinkClass}>Package</Link>
+                       <NavLink to="/" className={({isActive}) => isActive ? "text-blue-600 text-sm font-bold" : navLinkClass}>Home</NavLink>
 
                         <div className="relative h-16 flex items-center" onMouseEnter={() => setIsServiceHovered(true)} onMouseLeave={() => setIsServiceHovered(false)}>
                             <button className={`flex items-center ${navLinkClass} text-blue-600 outline-none`}>
@@ -195,7 +158,7 @@ const Header = () => {
                         </div>
 
                         <NavLink to="/services/feedback-form" className={({isActive}) => isActive ? "text-blue-600 text-sm font-bold" : navLinkClass}>Feedback Form</NavLink>
-                        
+
                         <div>
                             <Search />
                         </div>
@@ -203,6 +166,12 @@ const Header = () => {
                         <div className="flex items-center space-x-3 ml-4">
                             {!isLoggedIn ? (
                                 <>
+                                    <button onClick={() => navigate('/admin')} className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-semibold hover:bg-purple-700 shadow-md transition">
+                                        Admin
+                                    </button>
+                                    <button onClick={() => setIsTechOptionsOpen(true)} className="px-4 py-2 bg-orange-600 text-white rounded-lg text-sm font-semibold hover:bg-orange-700 shadow-md transition">
+                                        Join as Technician
+                                    </button>
                                     <button onClick={() => setIsRegisterOpen(true)} className="px-5 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-orange-500 shadow-md transition">
                                         Register
                                     </button>
@@ -295,11 +264,8 @@ const Header = () => {
             {/* Mobile Menu */}
             <div className={`md:hidden absolute top-16 left-0 w-full bg-white border-b shadow-lg transition-all duration-300 ${isMenuOpen ? 'block' : 'hidden'}`}>
                 <div className="p-5 flex flex-col space-y-4">
-                    {/* Added the missing links for mobile */}
                     <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-gray-700 font-medium">Home</Link>
-                    <Link to="/package" onClick={() => setIsMenuOpen(false)} className="text-gray-700 font-medium">Package</Link>
                     
-                    {/* Simple Services Link for Mobile */}
                     <Link to="/services" onClick={() => setIsMenuOpen(false)} className="text-gray-700 font-medium">Services</Link>
                     
                     <NavLink 
@@ -314,6 +280,18 @@ const Header = () => {
 
                     {!isLoggedIn ? (
                         <>
+                            <button 
+                                onClick={() => { navigate('/admin'); setIsMenuOpen(false); }} 
+                                className="w-full py-3 bg-purple-600 text-white rounded-xl font-bold"
+                            >
+                                Admin Dashboard
+                            </button>
+                            <button 
+                                onClick={() => { setIsTechOptionsOpen(true); setIsMenuOpen(false); }} 
+                                className="w-full py-3 bg-orange-600 text-white rounded-xl font-bold"
+                            >
+                                Join as Technician
+                            </button>
                             <button 
                                 onClick={() => { setIsRegisterOpen(true); setIsMenuOpen(false); }} 
                                 className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold"
@@ -353,10 +331,22 @@ const Header = () => {
             
             {/* Login Modal */}
             <Login 
-                isOpen={isLoginOpen} 
-                onClose={() => setIsLoginOpen(false)} 
-                onLoginSuccess={handleLoginSuccess}
+            isOpen={isLoginOpen} 
+            onClose={() => setIsLoginOpen(false)} 
+            onLoginSuccess={handleLoginSuccess}
+            onSwitchToRegister={switchToRegister}
             />
+
+            {/* Technician Modals */}
+            <TechnicianOptions 
+                isOpen={isTechOptionsOpen} 
+                onClose={() => setIsTechOptionsOpen(false)}
+                onRegister={() => setIsTechRegisterOpen(true)}
+                onLogin={() => setIsTechLoginOpen(true)}
+            />
+            <TechnicianRegister isOpen={isTechRegisterOpen} onClose={() => setIsTechRegisterOpen(false)} />
+            <TechnicianLogin isOpen={isTechLoginOpen} onClose={() => setIsTechLoginOpen(false)} />
+
         </header>
     );
 };

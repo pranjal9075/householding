@@ -24,7 +24,16 @@ const bookingReducer = (state, action) => {
                 ...state,
                 bookings: state.bookings.map(booking =>
                     booking.id === action.payload.id
-                        ? { ...booking, status: action.payload.status, technician: action.payload.technician }
+                        ? { ...booking, booking_status: action.payload.booking_status, technician: action.payload.technician }
+                        : booking
+                )
+            };
+        case 'UPDATE_PAYMENT_STATUS':
+            return {
+                ...state,
+                bookings: state.bookings.map(booking =>
+                    booking.id === action.payload.id
+                        ? { ...booking, payment_status: action.payload.payment_status, payment_method: action.payload.payment_method }
                         : booking
                 )
             };
@@ -33,7 +42,7 @@ const bookingReducer = (state, action) => {
                 ...state,
                 bookings: state.bookings.map(booking =>
                     booking.id === action.payload.bookingId
-                        ? { ...booking, status: 'accepted', technician: action.payload.technician }
+                        ? { ...booking, booking_status: 'accepted', technician: action.payload.technician }
                         : booking
                 )
             };
@@ -76,28 +85,12 @@ export const BookingProvider = ({ children }) => {
             const newBooking = {
                 ...bookingData,
                 id: `BK${Date.now()}`,
-                status: 'searching', // User creates booking, system searches for technicians
+                booking_status: 'pending', // Initial booking status
+                payment_status: 'unpaid', // Initial payment status
                 createdAt: new Date().toISOString()
             };
             
             dispatch({ type: 'CREATE_BOOKING', payload: newBooking });
-            
-            // Simulate technician acceptance after 3 seconds
-            setTimeout(() => {
-                const mockTechnician = {
-                    name: 'Raj Kumar',
-                    phone: '+91 98765 11111',
-                    rating: 4.8,
-                    skill: 'Plumbing'
-                };
-                dispatch({ 
-                    type: 'TECHNICIAN_ACCEPT_BOOKING', 
-                    payload: { 
-                        bookingId: newBooking.id, 
-                        technician: mockTechnician 
-                    } 
-                });
-            }, 3000);
             
             return newBooking;
         } catch (error) {
@@ -108,10 +101,17 @@ export const BookingProvider = ({ children }) => {
         }
     };
 
-    const updateBookingStatus = (bookingId, status) => {
+    const updateBookingStatus = (bookingId, booking_status) => {
         dispatch({
             type: 'UPDATE_BOOKING_STATUS',
-            payload: { id: bookingId, status }
+            payload: { id: bookingId, booking_status }
+        });
+    };
+
+    const updatePaymentStatus = (bookingId, payment_status, payment_method = null) => {
+        dispatch({
+            type: 'UPDATE_PAYMENT_STATUS',
+            payload: { id: bookingId, payment_status, payment_method }
         });
     };
 
@@ -140,6 +140,7 @@ export const BookingProvider = ({ children }) => {
         isLoading,
         createBooking,
         updateBookingStatus,
+        updatePaymentStatus,
         setCurrentBooking,
         clearCurrentBooking,
         setSelectedTechnician,

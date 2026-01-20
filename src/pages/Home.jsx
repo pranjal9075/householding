@@ -17,13 +17,23 @@ function Home() {
     <div>
       <main>
         <HeroSection />
-
-        <TrendingServices />
-        <HandymanServices />
-        <ServiceSection />
-        <PopularServices />
-        <VehicleServices />
-
+        
+        <div id="trending-services">
+            <TrendingServices />
+        </div>
+        <div id="handyman-services">
+            <HandymanServices />
+        </div>
+        <div id="service-services">
+            <ServiceSection />
+        </div>
+        <div id="popular-services">
+            <PopularServices />
+        </div>
+        <div id="vehical-services">
+              <VehicleServices />
+        </div>
+        
         <div id="it-repair-service">
           <ITRepairServices />
         </div>
@@ -36,7 +46,9 @@ function Home() {
           <AppliancesServices />
         </div>
 
-        <LaundryServices />
+        <div id="laundry-services">
+          <LaundryServices />
+        </div>
         <AboutInfo />
       </main>
     </div>

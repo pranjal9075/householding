@@ -51,7 +51,7 @@ const TrendingServices = () => {
             Most Popular Services
           </motion.div>
           
-          <h2 className="text-5xl md:text-6xl font-black text-slate-900 mb-6 leading-tight">
+          <h2 id="service" className="text-5xl md:text-6xl font-black text-slate-900 mb-6 leading-tight">
             Trending <span className="text-[#E67E22]">Services</span>
           </h2>
           

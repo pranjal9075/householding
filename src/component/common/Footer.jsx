@@ -42,11 +42,11 @@ export default function Footer() {
         <div>
           <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
           <div className="flex gap-3">
-            <SocialIcon><FaFacebookF /></SocialIcon>
-            <SocialIcon><FaTwitter /></SocialIcon>
-            <SocialIcon><FaInstagram /></SocialIcon>
-            <SocialIcon><FaLinkedinIn /></SocialIcon>
-            <SocialIcon><FaPinterestP /></SocialIcon>
+            <a href="https://www.facebook.com/"><FaFacebookF /></a>
+            <a href="https://www.facebook.com/"><FaTwitter /></a>
+            <a href="https://www.facebook.com/"><FaInstagram /></a>
+            <a href="https://www.facebook.com/"><FaLinkedinIn /></a>
+            <a href="https://www.facebook.com/"><FaPinterestP /></a>
           </div>
         </div>
       </div>
@@ -54,33 +54,7 @@ export default function Footer() {
       {/* Divider */}
       <div className="border-t border-white/20"></div>
 
-      {/* Links */}
-      <div className="max-w-7xl mx-auto px-6 py-6 flex flex-wrap gap-4 text-sm justify-center">
-        {[
-          "Home",
-          "About Us",
-          "Pay Now",
-          "Contact Us",
-          "Register as a Professional",
-          "Terms & Conditions",
-          "Privacy Policy",
-          "Enquiry Now",
-          "FAQ",
-        ].map((item, index) => (
-          <a
-            key={index}
-            href="#"
-            className={`px-3 py-1 ${
-              item === "Pay Now" || item === "Register as a Professional"
-                ? "bg-blue-700 rounded"
-                : "hover:text-orange-400"
-            }`}
-          >
-            {item}
-          </a>
-        ))}
-      </div>
-
+      
       {/* Bottom Bar */}
       <div className="bg-orange-600 text-center py-4 text-sm font-medium">
         Copyrights © 2024 FLYBIZZ SERVICES INDIA PRIVATE LIMITED.

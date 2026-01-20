@@ -1,9 +1,12 @@
 import React from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { HiOutlineHome } from 'react-icons/hi';
+import { getServicePrice } from '../../data/servicesData';
 
 
-const ServiceCard = ({ image, title, description, price = '299', serviceId, onBookNow, onEnquiryClick }) => {
+const ServiceCard = ({ image, title, description, price, serviceId, onBookNow, onEnquiryClick }) => {
+  // Get dynamic price from admin-controlled data
+  const displayPrice = price || getServicePrice(title);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -16,11 +19,6 @@ const ServiceCard = ({ image, title, description, price = '299', serviceId, onBo
   const backgroundX = useTransform(mouseX, [-0.5, 0.5], ["0%", "100%"]);
   const backgroundY = useTransform(mouseY, [-0.5, 0.5], ["0%", "100%"]);
 
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    x.set((e.clientX - rect.left) / rect.width - 0.5);
-    y.set((e.clientY - rect.top) / rect.height - 0.5);
-  };
 
   const handleMouseLeave = () => {
     x.set(0);
@@ -30,7 +28,7 @@ const ServiceCard = ({ image, title, description, price = '299', serviceId, onBo
   return (
     <div style={{ perspective: "1000px" }} className="p-2">
       <motion.div
-        onMouseMove={handleMouseMove}
+        // onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         // WIDTH REDUCED: Changed from w-80 to w-64 (256px)
@@ -58,14 +56,7 @@ const ServiceCard = ({ image, title, description, price = '299', serviceId, onBo
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-60" />
             
-            {/* ICON SIZE REDUCED: for balance */}
-            <motion.div 
-              animate={{ y: [0, -5, 0] }}
-              transition={{ duration: 4, repeat: Infinity }}
-              className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg rotate-12 flex items-center justify-center shadow-lg border-2 border-white z-20"
-            >
-              <HiOutlineHome className="text-white text-lg -rotate-12" />
-            </motion.div>
+           
           </div>
 
           {/* CONTENT AREA */}
@@ -78,9 +69,14 @@ const ServiceCard = ({ image, title, description, price = '299', serviceId, onBo
             </h3>
             
             {/* DESCRIPTION: line-clamp removed to show all text */}
-            <p className="text-gray-500 text-[11px] leading-relaxed mb-6 font-medium text-center">
+            <p className="text-gray-500 text-[11px] leading-relaxed mb-3 font-medium text-center">
               {description}
             </p>
+
+            {/* Price Display */}
+            <div className="mb-4 text-center">
+              <span className="text-2xl font-bold text-green-600">₹{displayPrice}</span>
+            </div>
 
             {/* BUTTONS: Scaled down to fit smaller width */}
             <div className="mt-auto flex gap-2 w-full">

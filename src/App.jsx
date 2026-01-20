@@ -25,7 +25,7 @@ import { CarpentryRepair } from "./pages/HandymanServices/CarpentryRepair";
 import { ElectricalRepair } from "./pages/HandymanServices/ElecricalRepair";
 import { WardrobeRepair } from "./pages/HandymanServices/WardrobeRepair";
 import { FurnitureRepair } from "./pages/HandymanServices/FurnitureRepair";
-import Package from "./pages/Package";
+// import Package from "./pages/Package";
 
 // --- NEW IMPORT: Admin Dashboard ---
 import AdminDashboard from "./pages/AdminDashboard";
@@ -33,24 +33,35 @@ import ServicePartners from "./component/Admin/ServicePartners";
 import Customers from "./pages/Customers";
 import Settings from "./component/Admin/Settings"; 
 import Reports from "./component/Admin/Reports";
+import BookingsTable from "./component/Admin/BookingsTable";
+import TechniciansManagement from "./component/Admin/TechniciansManagement";
+import UsersManagement from "./component/Admin/UsersManagement";
+import PaymentsManagement from "./component/Admin/PaymentsManagement";
+import SupportTicketsManagement from "./component/Admin/SupportTicketsManagement";
 
-
+// Emergency Service Components
+// import EmergencyService from "./component/emergency/EmergencyService";
 
 // --- AUTH CONTEXT ---
 import { AuthProvider } from "./context/AuthContext";
+import { BookingProvider } from "./context/BookingContext";
 import MyProfile from "./component/userdashboard/MyProfile";
 import MyBookings from "./component/userdashboard/MyBookings";
 import MyAddresses from "./component/userdashboard/MyAddresses";
 import MyPayments from "./component/userdashboard/MyPayments";
 import Support from "./component/userdashboard/Support";
 import TrackService from "./component/userdashboard/TrackService";
-import Packages from "./component/userdashboard/Packages";
+import PaymentPage from "./component/userdashboard/PaymentPage";
+import BookingConfirmation from "./component/userdashboard/BookingConfirmation";
+// import Packages from "./component/userdashboard/Packages";
 import Notifications from "./component/userdashboard/Notifications";
 import TechnicianDashboard from "./pages/TechnicianDashboard";
 import TestBookingFlow from "./pages/TestBookingFlow";
 import NotFound from "./pages/NotFound";
 import UserDashboard from "./pages/UserDashboard";
 import ServiceDetails from "./component/userdashboard/ServiceDetails";
+import LaundryServices from "./component/home/LaundryServices";
+
 
 
 function App() {
@@ -58,7 +69,7 @@ function App() {
 
   // Define valid routes
   const validRoutes = [
-    "/", "/package", "/services/feedback-form", "/services/ac-repair", "/services/cctv-repair",
+    "/", "/services/feedback-form", "/services/ac-repair", "/services/cctv-repair",
     "/services/packers-movers", "/services/sofa-repair", "/services/refrigerator-repair",
     "/services/plumber-repair", "/services/washing-machine-repair", "/services/geyser-repair",
     "/services/computer-networking", "/services/chimney-repair", "/services/microwave-oven",
@@ -66,7 +77,8 @@ function App() {
     "/services/carpentry-repair", "/services/electrical-repair", "/services/wardrobe-repair",
     "/services/furniture-repair", "/admin", "/user-dashboard", "/my-profile", "/my-bookings",
     "/my-addresses", "/my-payments", "/support", "/track-service", "/service-details", "/packages", "/notifications",
-    "/admin/service-partners", "/admin/customers", "/admin/reports", "/admin/settings", "/technician-dashboard", "/test-booking"
+    "/admin/bookings", "/admin/technicians", "/admin/users", "/admin/payments", "/admin/support-tickets", "/technician-dashboard", "/test-booking",
+    "/payment", "/booking-confirmation"
   ];
 
   // Check if current route is valid
@@ -74,7 +86,7 @@ function App() {
   
   // Check if current route is admin or user dashboard to hide Header/Footer
   const isAdminRoute = location.pathname.startsWith("/admin");
-  const isUserPages = ["/user-dashboard", "/my-profile", "/my-bookings", "/my-addresses", "/my-payments", "/support", "/service-details", "/track-service", "/packages", "/notifications", "/technician-dashboard"].includes(location.pathname);
+  const isUserPages = ["/user-dashboard", "/my-profile", "/my-bookings", "/my-addresses", "/my-payments", "/support", "/service-details", "/track-service", "/packages", "/notifications", "/technician-dashboard", "/payment", "/booking-confirmation"].includes(location.pathname);
   
   // Show header/footer only on valid routes and not on admin/user/technician pages
   const showHeaderFooter = isValidRoute && !isAdminRoute && !isUserPages;
@@ -96,8 +108,9 @@ function App() {
 
   return (
     <AuthProvider>
-      {/* Header hidden on Admin pages, User Pages, and 404 pages */}
-      {showHeaderFooter && <Header />}
+      <BookingProvider>
+        {/* Header hidden on Admin pages, User Pages, and 404 pages */}
+        {showHeaderFooter && <Header />}
       
       <Routes>
         {/* Admin Routes */}
@@ -107,13 +120,18 @@ function App() {
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/my-addresses" element={<MyAddresses />} />
         <Route path="/my-payments" element={<MyPayments />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/booking-confirmation" element={<BookingConfirmation />} />
         <Route path="/support" element={<Support />} />
         <Route path="/track-service" element={<TrackService />} />
         <Route path="/service-details" element={<ServiceDetails />} />
-        <Route path="/packages" element={<Packages />} />
+        {/* <Route path="/packages" element={<Packages />} /> */}
         <Route path="/notifications" element={<Notifications />} />
-        <Route path="/admin/service-partners" element={<ServicePartners />} />
-        <Route path="/admin/customers" element={<Customers />} />
+        <Route path="/admin/bookings" element={<BookingsTable />} />
+        <Route path="/admin/technicians" element={<TechniciansManagement />} />
+        <Route path="/admin/users" element={<UsersManagement />} />
+        <Route path="/admin/payments" element={<PaymentsManagement />} />
+        <Route path="/admin/support-tickets" element={<SupportTicketsManagement />} />
         <Route path="/admin/reports" element={<Reports />} />
         <Route path="/admin/settings" element={<Settings />} />
         <Route path="/technician-dashboard" element={<TechnicianDashboard />} />
@@ -121,7 +139,7 @@ function App() {
 
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
-        <Route path="/package" element={<Package />} />
+        {/* <Route path="/package" element={<Package />} /> */}
         <Route path="/services/feedback-form" element={<FeedbackForm/>} />
 
         <Route path="/services/ac-repair" element={<AcRepair />} />
@@ -142,6 +160,9 @@ function App() {
         <Route path="/services/electrical-repair" element={<ElectricalRepair />} />
         <Route path="/services/wardrobe-repair" element={<WardrobeRepair />} />
         <Route path="/services/furniture-repair" element={<FurnitureRepair />} />
+        <Route path="/services/laundry-services" element={<LaundryServices />} />
+        
+
         
         {/* 404 Catch-all route */}
         <Route path="*" element={<NotFound />} />
@@ -149,6 +170,10 @@ function App() {
 
       {/* Footer hidden on Admin pages, User Pages, and 404 pages */}
       {showHeaderFooter && <Footer />}
+      
+      {/* Emergency Service Button - Show on all pages except admin/technician dashboards */}
+      {/* {!isAdminRoute && !location.pathname.includes('technician-dashboard') && <EmergencyService />} */}
+      </BookingProvider>
     </AuthProvider>
   );
 }

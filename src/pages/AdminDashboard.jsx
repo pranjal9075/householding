@@ -1,13 +1,26 @@
 import React, { useState } from 'react';
+import AdminHeader from '../component/Admin/AdminHeader';
+import Dashboard from '../component/Admin/Dashboard';
+import BookingsTable from '../component/Admin/BookingsTable';
+import TechniciansManagement from '../component/Admin/TechniciansManagement';
+import UsersManagement from '../component/Admin/UsersManagement';
+import ServicesPricing from '../component/Admin/ServicesPricing';
+import PaymentsManagement from '../component/Admin/PaymentsManagement';
+import SupportTicketsManagement from '../component/Admin/SupportTicketsManagement';
+import Reports from '../component/Admin/Reports';
+import Reviews from '../component/Admin/Reviews';
+import Settings from '../component/Admin/Settings';
 import { 
   LayoutDashboard, ListOrdered, Wrench, CreditCard, 
-  Users, BarChart3, X, Phone, MapPin, Clock, Eye, Download
+  Users, BarChart3, X, Phone, MapPin, Clock, Eye, Download, MessageSquare
 } from 'lucide-react';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('Dashboard');
   const [showModal, setShowModal] = useState(null);
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   
   // Mock Data - Direct user to technician bookings
   const bookings = [
@@ -23,6 +36,19 @@ const AdminDashboard = () => {
     { id: 3, name: 'Suresh Yadav', skill: 'AC Repair', status: 'Available', rating: 4.9, phone: '+91 98765 33333', city: 'Noida', completedJobs: 67, earnings: 32000, verified: true },
     { id: 4, name: 'Vikash Kumar', skill: 'AC Repair', status: 'Busy', rating: 4.7, phone: '+91 98765 44444', city: 'Delhi', completedJobs: 89, earnings: 21000, verified: false },
   ];
+
+  const pendingTechnicians = [
+    { id: 5, name: 'Rajesh Kumar', skill: 'Plumber', phone: '+91 98765 55555', documents: 'Complete', status: 'pending' },
+    { id: 6, name: 'Mohan Singh', skill: 'Electrician', phone: '+91 98765 66666', documents: 'Incomplete', status: 'pending' }
+  ];
+
+  const handleApproveTechnician = (techId) => {
+    alert(`Technician approved! They can now login and receive jobs.`);
+  };
+
+  const handleRejectTechnician = (techId) => {
+    alert('Technician rejected. Documents need revision.');
+  };
 
   const services = [
     { name: 'Plumbing', price: '₹500-2000', technicians: 45, bookings: 234 },
@@ -236,18 +262,28 @@ const AdminDashboard = () => {
         
         <div className="space-y-6">
           <div>
-            <h4 className="font-medium mb-3">Pending Verifications (3):</h4>
+            <h4 className="font-medium mb-3">Pending Verifications ({pendingTechnicians.length}):</h4>
             <div className="space-y-2">
-              {[{name: 'Ramesh Kumar', status: 'Documents Submitted'}, {name: 'Vikash Singh', status: 'Background Check Pending'}].map((tech, idx) => (
-                <div key={idx} className="p-3 bg-yellow-900/20 border border-yellow-600 rounded">
+              {pendingTechnicians.map((tech) => (
+                <div key={tech.id} className="p-3 bg-yellow-900/20 border border-yellow-600 rounded">
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="font-medium">📄 {tech.name}</p>
-                      <p className="text-sm text-slate-400">{tech.status}</p>
+                      <p className="text-sm text-slate-400">{tech.skill} • {tech.documents}</p>
                     </div>
                     <div className="space-x-2">
-                      <button className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-xs">Verify</button>
-                      <button className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-xs">Reject</button>
+                      <button 
+                        onClick={() => handleApproveTechnician(tech.id)}
+                        className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-xs"
+                      >
+                        Approve
+                      </button>
+                      <button 
+                        onClick={() => handleRejectTechnician(tech.id)}
+                        className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-xs"
+                      >
+                        Reject
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -475,457 +511,106 @@ const AdminDashboard = () => {
 
   const renderContent = () => {
     if (activeTab === 'Bookings') {
-      return (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <KPICard title="Total Bookings" value="1,247" icon="📋" color="blue" />
-            <KPICard title="Today's Bookings" value="23" icon="📅" color="green" />
-            <KPICard title="Ongoing Jobs" value="8" icon="🔄" color="orange" />
-            <KPICard title="Completed Today" value="15" icon="✅" color="purple" />
-          </div>
-          <div className="bg-[#1e293b] rounded-xl p-6 border border-slate-700">
-            <h3 className="text-xl font-medium mb-4">📋 Live Booking Monitor</h3>
-            <p className="text-sm text-slate-400 mb-4">Users directly book with technicians. Admin monitors all activities.</p>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="text-slate-400 border-b border-slate-700">
-                    <th className="pb-3 font-medium">Booking ID</th>
-                    <th className="pb-3 font-medium">Customer</th>
-                    <th className="pb-3 font-medium">Service</th>
-                    <th className="pb-3 font-medium">Technician</th>
-                    <th className="pb-3 font-medium">Status</th>
-                    <th className="pb-3 font-medium">Amount</th>
-                    <th className="pb-3 font-medium">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-700">
-                  {bookings.map((item, idx) => (
-                    <tr key={idx} className="hover:bg-slate-800/50 transition">
-                      <td className="py-4 text-blue-400">{item.id}</td>
-                      <td className="py-4">
-                        <div>
-                          <p className="font-medium">{item.customer}</p>
-                          <p className="text-xs text-slate-400">{item.phone}</p>
-                        </div>
-                      </td>
-                      <td className="py-4">{item.service}</td>
-                      <td className="py-4">
-                        <div>
-                          <p className="font-medium">{item.technician}</p>
-                          <p className="text-xs text-slate-400">{item.location}</p>
-                        </div>
-                      </td>
-                      <td className="py-4"><StatusBadge status={item.status} /></td>
-                      <td className="py-4 font-bold">₹{item.amount}</td>
-                      <td className="py-4">
-                        <button 
-                          onClick={() => {
-                            setSelectedBooking(item);
-                            setShowModal('bookingDetails');
-                          }}
-                          className="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded text-xs mr-2 flex items-center gap-1"
-                        >
-                          <Eye size={12} /> View Details
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      );
+      return <BookingsTable />;
+    }
+
+    if (activeTab === 'Technicians') {
+      return <TechniciansManagement />;
     }
 
     if (activeTab === 'Services') {
-      return (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <KPICard title="Total Services" value="12" icon="🔧" color="blue" />
-            <KPICard title="Active Technicians" value="89" icon="⚡" color="green" />
-            <KPICard title="Avg Rating" value="4.7" icon="⭐" color="orange" />
-            <KPICard title="Revenue" value="₹8.5L" icon="💰" color="purple" />
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-[#1e293b] rounded-xl p-6 border border-slate-700">
-              <h3 className="text-xl font-medium mb-4">🔧 Service Categories</h3>
-              <div className="space-y-4">
-                {services.map((service, idx) => (
-                  <div key={idx} className="bg-slate-800 p-4 rounded-lg">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <h4 className="font-medium">{service.name}</h4>
-                        <p className="text-sm text-slate-400">{service.price}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm">{service.technicians} Techs</p>
-                        <p className="text-sm text-green-400">{service.bookings} Bookings</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="bg-[#1e293b] rounded-xl p-6 border border-slate-700">
-              <h3 className="text-xl font-medium mb-4">👨🔧 Technician Overview</h3>
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-slate-800 p-3 rounded text-center">
-                    <p className="text-2xl font-bold text-green-400">{technicians.filter(t => t.status === 'Available').length}</p>
-                    <p className="text-sm text-slate-400">Available</p>
-                  </div>
-                  <div className="bg-slate-800 p-3 rounded text-center">
-                    <p className="text-2xl font-bold text-orange-400">{technicians.filter(t => t.status === 'Busy').length}</p>
-                    <p className="text-sm text-slate-400">Busy</p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setShowModal('technicianDetails')}
-                  className="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded"
-                >
-                  Manage Technicians
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
+      return <ServicesPricing />;
     }
 
     if (activeTab === 'Payments') {
-      return (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <KPICard title="Total Payments" value="₹12.5L" icon="💳" color="blue" />
-            <KPICard title="Pending" value="₹45K" icon="⏳" color="orange" />
-            <KPICard title="Admin Share" value="₹1.8L" icon="🏦" color="green" />
-            <KPICard title="Tech Share" value="₹10.7L" icon="👨🔧" color="purple" />
-          </div>
-          <div className="bg-[#1e293b] rounded-xl p-6 border border-slate-700">
-            <h3 className="text-xl font-medium mb-4">💳 Payment History</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="text-slate-400 border-b border-slate-700">
-                    <th className="pb-3 font-medium">Payment ID</th>
-                    <th className="pb-3 font-medium">Technician</th>
-                    <th className="pb-3 font-medium">Amount</th>
-                    <th className="pb-3 font-medium">Date</th>
-                    <th className="pb-3 font-medium">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-700">
-                  {payments.map((payment, idx) => (
-                    <tr key={idx} className="hover:bg-slate-800/50 transition">
-                      <td className="py-4 text-blue-400">{payment.id}</td>
-                      <td className="py-4">{payment.technician}</td>
-                      <td className="py-4 font-bold">{payment.amount}</td>
-                      <td className="py-4">{payment.date}</td>
-                      <td className="py-4"><StatusBadge status={payment.status} /></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      );
+      return <PaymentsManagement />;
     }
 
     if (activeTab === 'Users') {
-      return (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <KPICard title="Total Users" value="2,847" icon="👥" color="blue" />
-            <KPICard title="Active Today" value="156" icon="🟢" color="green" />
-            <KPICard title="New This Week" value="89" icon="🆕" color="orange" />
-            <KPICard title="Repeat Customers" value="234" icon="⭐" color="purple" />
-          </div>
-          <div className="bg-[#1e293b] rounded-xl p-6 border border-slate-700">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-medium">👥 User Management</h3>
-              <button 
-                onClick={() => setShowModal('manageUsers')}
-                className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm"
-              >
-                Manage Users
-              </button>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="text-slate-400 border-b border-slate-700">
-                    <th className="pb-3 font-medium">User ID</th>
-                    <th className="pb-3 font-medium">Name</th>
-                    <th className="pb-3 font-medium">Contact</th>
-                    <th className="pb-3 font-medium">Bookings</th>
-                    <th className="pb-3 font-medium">Last Booking</th>
-                    <th className="pb-3 font-medium">City</th>
-                    <th className="pb-3 font-medium">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-700">
-                  {users.map((user, idx) => (
-                    <tr key={idx} className="hover:bg-slate-800/50 transition">
-                      <td className="py-4 text-blue-400">{user.id}</td>
-                      <td className="py-4">{user.name}</td>
-                      <td className="py-4">
-                        <div>
-                          <p className="text-sm">{user.email}</p>
-                          <p className="text-xs text-slate-400">{user.phone}</p>
-                        </div>
-                      </td>
-                      <td className="py-4 font-bold">{user.bookings}</td>
-                      <td className="py-4">{user.lastBooking}</td>
-                      <td className="py-4">{user.city}</td>
-                      <td className="py-4">
-                        <button className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-xs mr-2">📊 View History</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      );
+      return <UsersManagement />;
+    }
+
+    if (activeTab === 'Support Tickets') {
+      return <SupportTicketsManagement />;
     }
 
     if (activeTab === 'Reports') {
-      return (
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <KPICard title="Monthly Revenue" value="₹15.2L" icon="📈" color="blue" />
-            <KPICard title="Growth Rate" value="+12%" icon="📊" color="green" />
-            <KPICard title="Avg Rating" value="4.8" icon="⭐" color="orange" />
-            <KPICard title="Completion Rate" value="94%" icon="✅" color="purple" />
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-[#1e293b] rounded-xl p-6 border border-slate-700">
-              <h3 className="text-xl font-medium mb-4">📊 System Health</h3>
-              <div className="space-y-4">
-                <div className="bg-green-900/30 p-4 rounded-lg text-center">
-                  <div className="text-4xl mb-2">✅</div>
-                  <p className="text-green-400 font-bold text-lg">System Smooth Chal Raha Hai!</p>
-                  <p className="text-sm text-slate-400">All services running perfectly</p>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-slate-800 p-3 rounded text-center">
-                    <p className="text-green-400 font-bold">Server</p>
-                    <p className="text-xs text-slate-400">Online</p>
-                  </div>
-                  <div className="bg-slate-800 p-3 rounded text-center">
-                    <p className="text-green-400 font-bold">Database</p>
-                    <p className="text-xs text-slate-400">Connected</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-[#1e293b] rounded-xl p-6 border border-slate-700">
-              <h3 className="text-xl font-medium mb-4">📈 Analytics</h3>
-              <div className="space-y-4">
-                <div className="bg-slate-800 p-4 rounded">
-                  <p className="text-sm text-slate-400">Today's Bookings</p>
-                  <p className="text-2xl font-bold">23</p>
-                </div>
-                <div className="bg-slate-800 p-4 rounded">
-                  <p className="text-sm text-slate-400">Revenue Today</p>
-                  <p className="text-2xl font-bold text-green-400">₹45,600</p>
-                </div>
-                <div className="bg-slate-800 p-4 rounded">
-                  <p className="text-sm text-slate-400">Active Technicians</p>
-                  <p className="text-2xl font-bold text-blue-400">67</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
+      return <Reports />;
+    }
+
+    if (activeTab === 'Reviews') {
+      return <Reviews />;
+    }
+
+    if (activeTab === 'Settings') {
+      return <Settings />;
     }
 
     // Default Dashboard
-    return (
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <KPICard title="Total Users" value="2,847" icon="👥" color="blue" />
-          <KPICard title="Total Technicians" value="480" icon="👨🔧" color="green" />
-          <KPICard title="Total Bookings" value="1,247" icon="📋" color="orange" />
-          <KPICard title="Today's Bookings" value="23" icon="📅" color="purple" />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <div className="bg-[#1e293b] rounded-xl p-6 border border-slate-700">
-            <h3 className="text-xl font-medium mb-4">🔥 Live Activity Monitor</h3>
-            <p className="text-sm text-slate-400 mb-4">Real-time booking flow: User → Technician (Direct)</p>
-            
-            <div className="space-y-3">
-              <div className="p-3 bg-green-900/20 border border-green-600 rounded">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="font-medium text-green-400">✅ New Booking Accepted</p>
-                    <p className="text-sm text-slate-400">John Doe → Raj Kumar (Plumbing)</p>
-                  </div>
-                  <p className="text-xs text-slate-400">2 min ago</p>
-                </div>
-              </div>
-              
-              <div className="p-3 bg-blue-900/20 border border-blue-600 rounded">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="font-medium text-blue-400">🚗 Technician On The Way</p>
-                    <p className="text-sm text-slate-400">Amit Singh → Alice Smith (Electrical)</p>
-                  </div>
-                  <p className="text-xs text-slate-400">5 min ago</p>
-                </div>
-              </div>
-              
-              <div className="p-3 bg-purple-900/20 border border-purple-600 rounded">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <p className="font-medium text-purple-400">✅ Job Completed</p>
-                    <p className="text-sm text-slate-400">Suresh Yadav → Michael Brown (AC Repair)</p>
-                  </div>
-                  <p className="text-xs text-slate-400">8 min ago</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="mt-4 flex gap-2">
-              <button 
-                onClick={() => setShowModal('trackStatus')}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 py-2 rounded text-sm"
-              >
-                📍 Live Tracking
-              </button>
-            </div>
-          </div>
-
-          <div className="bg-[#1e293b] rounded-xl p-6 border border-slate-700">
-            <h3 className="text-lg font-medium mb-4">👨🔧 Technician Status</h3>
-            <div className="space-y-3">
-              {technicians.slice(0, 4).map((tech, idx) => (
-                <div key={idx} className="bg-slate-800 p-3 rounded-lg">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="font-medium">{tech.name}</p>
-                      <p className="text-xs text-slate-400">{tech.skill} • {tech.city}</p>
-                    </div>
-                    <div className="text-right">
-                      <StatusBadge status={tech.status} />
-                      <p className="text-xs text-yellow-400">⭐ {tech.rating}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 space-y-2">
-              <button 
-                onClick={() => setShowModal('technicianDetails')}
-                className="w-full bg-green-600 hover:bg-green-700 py-2 rounded text-sm"
-              >
-                Manage All Technicians
-              </button>
-              <button 
-                onClick={() => setShowModal('processPayments')}
-                className="w-full bg-orange-600 hover:bg-orange-700 py-2 rounded text-sm"
-              >
-                💳 Process Payments
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="bg-[#1e293b] rounded-xl p-6 border border-slate-700">
-            <h3 className="text-lg font-medium mb-4">📊 Today's Stats</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-slate-400">Ongoing Jobs</span>
-                <span className="font-bold text-orange-400">8</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Completed Jobs</span>
-                <span className="font-bold text-green-400">15</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Revenue Today</span>
-                <span className="font-bold text-blue-400">₹45,600</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-400">Admin Commission</span>
-                <span className="font-bold text-purple-400">₹6,840</span>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-[#1e293b] rounded-xl p-6 border border-slate-700">
-            <h3 className="text-lg font-medium mb-4">⚠️ Alerts</h3>
-            <div className="space-y-2">
-              <div className="p-2 bg-yellow-900/20 border border-yellow-600 rounded text-sm">
-                <p className="text-yellow-400 font-medium">2 Technicians Pending Verification</p>
-              </div>
-              <div className="p-2 bg-red-900/20 border border-red-600 rounded text-sm">
-                <p className="text-red-400 font-medium">1 Payment Dispute</p>
-              </div>
-              <div className="p-2 bg-blue-900/20 border border-blue-600 rounded text-sm">
-                <p className="text-blue-400 font-medium">5 New User Registrations</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-[#1e293b] rounded-xl p-6 border border-slate-700">
-            <h3 className="text-lg font-medium mb-4">📈 Quick Actions</h3>
-            <div className="space-y-2">
-              <button 
-                onClick={() => setShowModal('manageUsers')}
-                className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-sm"
-              >
-                👥 Manage Users
-              </button>
-              <button className="w-full bg-green-600 hover:bg-green-700 py-2 rounded text-sm">
-                📄 Download Reports
-              </button>
-              <button className="w-full bg-purple-600 hover:bg-purple-700 py-2 rounded text-sm">
-                ⚙️ System Settings
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <Dashboard />;
   };
 
   return (
-    <div className="flex min-h-screen bg-[#0f172a] text-white font-sans">
-      
+    <div className="min-h-screen bg-[#0f172a] text-white font-sans">
+      <div className="fixed top-0 left-0 right-0 z-50">
+        <AdminHeader />
+      </div>
+      <div className="flex pt-16">
       {/* --- Sidebar --- */}
-      <aside className="w-64 bg-[#1e293b] border-r border-slate-700 flex flex-col">
+      <aside
+  className={`
+    fixed z-40
+    top-16 bottom-0 w-64
+    bg-[#1e293b] border-r border-slate-700
+    flex flex-col flex-shrink-0
+    transform transition-transform duration-300
+    ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+    md:translate-x-0
+    overflow-y-auto scrollbar-hide
+  `}
+>
+
         <div className="p-6 flex items-center gap-2">
           <div className="bg-orange-500 p-1.5 rounded">
             <Wrench size={20} className="text-white" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight">REPAIR BAZAR</h1>
+          <h1 className="text-xl font-bold tracking-tight">House Holding</h1>
         </div>
 
-        <nav className="flex-1 px-4 py-4 space-y-2">
-          <NavItem icon={<LayoutDashboard size={20}/>} label="Dashboard" active={activeTab === 'Dashboard'} onClick={() => setActiveTab('Dashboard')} />
-          <NavItem icon={<ListOrdered size={20}/>} label="Bookings" active={activeTab === 'Bookings'} onClick={() => setActiveTab('Bookings')} />
-          <NavItem icon={<Wrench size={20}/>} label="Services" active={activeTab === 'Services'} onClick={() => setActiveTab('Services')} />
-          <NavItem icon={<CreditCard size={20}/>} label="Payments" active={activeTab === 'Payments'} onClick={() => setActiveTab('Payments')} />
-          <NavItem icon={<Users size={20}/>} label="Users" active={activeTab === 'Users'} onClick={() => setActiveTab('Users')} />
-          <NavItem icon={<BarChart3 size={20}/>} label="Reports" active={activeTab === 'Reports'} onClick={() => setActiveTab('Reports')} />
+        <nav className="flex-1 px-4 py-4 space-y-2 overflow-y-auto scrollbar-hide">
+          <NavItem icon={<LayoutDashboard size={20}/>} label="Dashboard" active={activeTab === 'Dashboard'} onClick={() => {setActiveTab('Dashboard');setSidebarOpen(false);}} 
+/>
+          <NavItem icon={<ListOrdered size={20}/>} label="Bookings" active={activeTab === 'Bookings'} onClick={() =>{ setActiveTab('Bookings');setSidebarOpen(false);}} />
+          <NavItem icon={<Users size={20}/>} label="Technicians" active={activeTab === 'Technicians'} onClick={() => {setActiveTab('Technicians');setSidebarOpen(false);}} />
+          <NavItem icon={<Users size={20}/>} label="Users" active={activeTab === 'Users'} onClick={() => {setActiveTab('Users');setSidebarOpen(false);}} />
+          <NavItem icon={<Wrench size={20}/>} label="Services & Pricing" active={activeTab === 'Services'} onClick={() => {setActiveTab('Services');setSidebarOpen(false);}} />
+          <NavItem icon={<CreditCard size={20}/>} label="Payments" active={activeTab === 'Payments'} onClick={() => {setActiveTab('Payments');setSidebarOpen(false);}} />
+          <NavItem icon={<MessageSquare size={20}/>} label="Support Tickets" active={activeTab === 'Support Tickets'} onClick={() => {setActiveTab('Support Tickets');setSidebarOpen(false);}} />
+          <NavItem icon={<BarChart3 size={20}/>} label="Reports" active={activeTab === 'Reports'} onClick={() => {setActiveTab('Reports');setSidebarOpen(false);}} />
+          <NavItem icon={<BarChart3 size={20}/>} label="Reviews" active={activeTab === 'Reviews'} onClick={() => {setActiveTab('Reviews');setSidebarOpen(false);}} />
+          <NavItem icon={<BarChart3 size={20}/>} label="Settings" active={activeTab === 'Settings'} onClick={() => {setActiveTab('Settings');setSidebarOpen(false);}} />
         </nav>
       </aside>
 
       {/* --- Main Content --- */}
-      <main className="flex-1 p-8 overflow-y-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-semibold">{activeTab} Overview</h2>
+      <main className="flex-1 md:ml-64 overflow-y-auto h-screen scrollbar-hide">
+        <div className="p-8">
+          <div className="flex justify-between items-center mb-8">
+          <div className="flex items-center gap-3">
+            <button
+              className="md:hidden bg-slate-800 p-2 rounded"
+              onClick={() => setSidebarOpen(true)}
+            >
+              ☰
+            </button>
+
+            <h2 className="text-2xl font-semibold">{activeTab} Overview</h2>
+          </div>
         </div>
 
-        {renderContent()}
+
+          {renderContent()}
+        </div>
       </main>
 
       {/* --- Modals --- */}
@@ -934,6 +619,7 @@ const AdminDashboard = () => {
       {showModal === 'technicianDetails' && <TechnicianDetailsModal />}
       {showModal === 'processPayments' && <ProcessPaymentsModal />}
       {showModal === 'manageUsers' && <ManageUsersModal />}
+      </div>
     </div>
   );
 };

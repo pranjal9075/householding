@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
+import { useBooking } from '../../context/BookingContext';
+import { useNavigate } from 'react-router-dom';
+import { getServicePrice } from '../../data/servicesData';
 
 const BookingForm = ({ isOpen, onClose, serviceName }) => {
   const { user } = useAuth();
+  const { createBooking } = useBooking();
+  const navigate = useNavigate();
+  const servicePrice = getServicePrice(serviceName);
   const [formData, setFormData] = useState({
     fullName: '',
     mobileNumber: '',
@@ -51,32 +57,45 @@ const BookingForm = ({ isOpen, onClose, serviceName }) => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (validateForm()) {
-      const bookingData = {
-        ...formData,
-        serviceName,
-        bookingId: `BK${Date.now()}`,
-        status: 'searching', // Changed from 'pending' to 'searching'
-        createdAt: new Date().toISOString()
-      };
-      
-      console.log('Booking Submitted:', bookingData);
-      alert(`Booking request sent!\nBooking ID: ${bookingData.bookingId}\n\nSearching for nearby technicians...\nYou will be notified once a technician accepts your request.`);
-      
-      // Reset form and close
-      setFormData({
-        fullName: '',
-        mobileNumber: '',
-        address: '',
-        preferredDate: '',
-        timeSlot: '',
-        problemDescription: ''
-      });
-      setErrors({});
-      onClose();
+      try {
+        // Create booking with pending status
+        const bookingData = {
+          ...formData,
+          serviceName,
+          amount: servicePrice,
+          userId: user?.id || 'guest'
+        };
+        
+        await createBooking(bookingData);
+        
+        // Navigate to payment page
+        navigate('/payment', { 
+          state: { 
+            serviceName,
+            amount: servicePrice,
+            bookingData: formData
+          } 
+        });
+        
+        // Reset form and close
+        setFormData({
+          fullName: '',
+          mobileNumber: '',
+          address: '',
+          preferredDate: '',
+          timeSlot: '',
+          problemDescription: ''
+        });
+        setErrors({});
+        onClose();
+      } catch (error) {
+        console.error('Error creating booking:', error);
+        alert('Failed to create booking. Please try again.');
+      }
     }
   };
 
@@ -122,9 +141,15 @@ const BookingForm = ({ isOpen, onClose, serviceName }) => {
 
           {/* Service Name Display */}
           <div className="px-6 py-4 bg-gray-50 border-b">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span className="font-semibold text-gray-800">Service: {serviceName}</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                <span className="font-semibold text-gray-800">Service: {serviceName}</span>
+              </div>
+              <div className="text-right">
+                <span className="text-2xl font-bold text-green-600">₹{servicePrice}</span>
+                <p className="text-xs text-gray-500">Taxes Included</p>
+              </div>
             </div>
           </div>
 
@@ -243,7 +268,15 @@ const BookingForm = ({ isOpen, onClose, serviceName }) => {
             </div>
 
             {/* Submit Buttons */}
-            <div className="flex gap-3 pt-4">
+            <div className="bg-blue-50 p-4 rounded-lg mb-4">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-700 font-medium">You are paying:</span>
+                <span className="text-3xl font-bold text-green-600">₹{servicePrice}</span>
+              </div>
+              <p className="text-xs text-gray-600 mt-1">Service: {serviceName}</p>
+            </div>
+
+            <div className="flex gap-3 pt-2">
               <button
                 type="button"
                 onClick={onClose}
@@ -255,7 +288,7 @@ const BookingForm = ({ isOpen, onClose, serviceName }) => {
                 type="submit"
                 className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-colors font-medium"
               >
-                Book Now
+                Confirm Booking
               </button>
             </div>
           </form>
